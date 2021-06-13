@@ -27,6 +27,15 @@ def get_page_number(soup):
     return pages_split2
 
 
+def get_apartment(item):
+    subtitle = item.find_all("div", {'class': 'cassetteitem_content-title'})
+    subtitle = str(subtitle)
+    subtitle_rep = subtitle.replace('[<div class="cassetteitem_content-title">', '')
+    subtitle_rep2 = subtitle_rep.replace('</div>]', '')
+
+    return subtitle_rep2
+
+
 class SuumoScrapyJob:
     def __init__(self, url):
         """
@@ -101,6 +110,10 @@ class SuumoScrapyJob:
 
             # マンション名、住所、立地（最寄駅/徒歩~分）、築年数、建物高さが入っているcassetteitemを全て抜き出し
             cassetteitems = summary.find_all("div", {'class': 'cassetteitem'})
+
+            for item in cassetteitems:
+                # 各建物から売りに出ている部屋数を取得
+                tbody = item.find_all('tbody')
 
     def get_series(self):
         self.name = Series(self.name)
