@@ -1,5 +1,9 @@
+from scrapy import SuumoScrapyJob
+from const import URL
+
+
 def main():
-    pass
+    SuumoScrapyJob(URL)
 
 
 if __name__ == '__main__':
