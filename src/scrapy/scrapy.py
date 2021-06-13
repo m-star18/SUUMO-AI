@@ -6,6 +6,7 @@ import pandas as pd
 from pandas import Series, DataFrame
 
 from const import (
+    NAME,
     FLOOR,
     RENT,
     ADMIN,
@@ -139,6 +140,10 @@ class SuumoScrapyJob:
         self.floor_plan = []
         self.area = []
 
+        self.run()
+        self.get_series()
+        self.get_csv()
+
     def run(self):
         for i, url in enumerate(self.urls):
             print(f'{i}/{self.pages_split3}')
@@ -220,3 +225,16 @@ class SuumoScrapyJob:
         self.others = Series(self.others)
         self.floor_plan = Series(self.floor_plan)
         self.area = Series(self.area)
+
+    def get_csv(self):
+        # 各シリーズをデータフレーム化
+        suumo_df = pd.concat([self.name, self.address, self.locations0, self.locations1, self.locations2, self.age,
+                              self.height, self.floor, self.rent, self.admin, self.deposit, self.others,
+                              self.floor_plan, self.area], axis=1)
+
+        # カラム名
+        suumo_df.columns = ['マンション名', '住所', '立地1', '立地2', '立地3', '築年数', '建物高さ', '階', '賃料', '管理費', '敷金',
+                            '礼金', '間取り', '専有面積']
+
+        # csvファイルとして保存
+        suumo_df.to_csv(f'suumo_{NAME}.csv', sep='\t', encoding='utf-16')
