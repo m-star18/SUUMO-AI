@@ -6,6 +6,27 @@ import pandas as pd
 from pandas import Series, DataFrame
 
 
+def get_property_list(url):
+    result = requests.get(url)
+    content = result.content
+    soup = BeautifulSoup(content)
+    summary = soup.find("div", {'id': 'js-bukkenList'})
+
+    return soup, summary
+
+
+def get_page_number(soup):
+    body = soup.find("body")
+    pages = body.find_all("div", {'class': 'pagination pagination_set-nav'})
+    pages_text = str(pages)
+    pages_split = pages_text.split('</a></li>\n</ol>')
+    pages_split0 = pages_split[0]
+    pages_split1 = pages_split0[-3:]
+    pages_split2 = int(pages_split1.replace('>', ''))
+
+    return pages_split2
+
+
 class SuumoScrapyJob:
     def __init__(self, url):
         """
@@ -45,18 +66,17 @@ class SuumoScrapyJob:
         self.area: list of int
             専有面積.
         """
-        self.url = url
-        self.urls = [self.url]
-        self.result = requests.get(url)
-        self.content = self.result.content
-        self.soup = BeautifulSoup(self.content)
-        self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
+        self.urls = [url]
+        soup, _ = get_property_list(url)
 
         # ページ数の取得
-        self.pages_split3 = self.get_page_number()
+        self.pages_split3 = get_page_number(soup)
 
         # 2ページ目から最後のページまでを格納
-        self.pages_storage()
+        for i in range(self.pages_split3 - 2):
+            pg = str(i + 2)
+            url_page = url + '&pn=' + pg
+            self.urls.append(url_page)
 
         self.name = []
         self.address = []
@@ -72,29 +92,6 @@ class SuumoScrapyJob:
         self.others = []
         self.floor_plan = []
         self.area = []
-
-    def pages_storage(self):
-        for i in range(self.pages_split3 - 2):
-            pg = str(i + 2)
-            url_page = self.url + '&pn=' + pg
-            self.urls.append(url_page)
-
-    def get_page_number(self):
-        """
-        Returns
-        -------
-        pages_split2: int
-            ページ数.
-        """
-        body = self.soup.find("body")
-        pages = body.find_all("div", {'class': 'pagination pagination_set-nav'})
-        pages_text = str(pages)
-        pages_split = pages_text.split('</a></li>\n</ol>')
-        pages_split0 = pages_split[0]
-        pages_split1 = pages_split0[-3:]
-        pages_split2 = int(pages_split1.replace('>', ''))
-
-        return pages_split2
 
     def get_series(self):
         self.name = Series(self.name)
