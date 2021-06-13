@@ -130,19 +130,19 @@ class SuumoScrapyJob:
                 # 住所取得
                 address = get_address(item)
 
-                # 立地を取得
-                locations = item.find_all("li", {'class': 'cassetteitem_detail-col2'})
-
                 # 部屋数だけ, マンション名と住所を格納（部屋情報と数を合致させるため）
                 for _ in range(len(tbody)):
                     self.name.append(apartment)
                     self.address.append(address)
 
+                # 立地を取得
+                locations = item.find_all("li", {'class': 'cassetteitem_detail-col2'})
+
                 # 立地は、1つ目から3つ目までを取得（4つ目以降は無視）
                 for location in locations:
                     cols = location.find_all('div')
                     for j, col in enumerate(cols):
-                        text = cols.find(text=True)
+                        text = col.find(text=True)
                         for _ in range(len(tbody)):
                             if j == 0:
                                 self.locations0.append(text)
@@ -150,6 +150,18 @@ class SuumoScrapyJob:
                                 self.locations1.append(text)
                             elif j == 2:
                                 self.locations2.append(text)
+
+                # 築年数と建物高さを格納
+                col3 = item.find_all("li", {'class': 'cassetteitem_detail-col3'})
+                for x in col3:
+                    cols = x.find_all('div')
+                    for j, col in enumerate(cols):
+                        text = col.find(text=True)
+                        for y in range(len(tbody)):
+                            if i == 0:
+                                self.age.append(text)
+                            else:
+                                self.height.append(text)
 
     def get_series(self):
         self.name = Series(self.name)
