@@ -208,7 +208,7 @@ class SuumoScrapyJob:
                         self.floor_plan.append(data[j + FLOOR_PLAN])
                         self.area.append(data[j + AREA])
 
-                time.sleep(10)
+            time.sleep(10)
 
     def get_series(self):
         self.name = Series(self.name)
