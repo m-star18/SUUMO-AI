@@ -53,14 +53,9 @@ class SuumoScrapyJob:
         self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
 
         # ページ数の取得
-        self.body = self.soup.find("body")
-        self.pages = self.body.find_all("div", {'class': 'pagination pagination_set-nav'})
-        self.pages_text = str(self.pages)
-        self.pages_split = self.pages_text.split('</a></li>\n</ol>')
-        self.pages_split0 = self.pages_split[0]
-        self.pages_split1 = self.pages_split0[-3:]
-        self.pages_split2 = self.pages_split1.replace('>', '')
-        self.pages_split3 = int(self.pages_split2)
+        self.pages_split3 = self.get_page_number()
+
+        # 2ページ目から最後のページまでを格納
         self.pages_storage()
 
         self.name = []
@@ -83,6 +78,18 @@ class SuumoScrapyJob:
             pg = str(i + 2)
             url_page = self.url + '&pn=' + pg
             self.urls.append(url_page)
+
+    def get_page_number(self):
+        body = self.soup.find("body")
+        pages = body.find_all("div", {'class': 'pagination pagination_set-nav'})
+        pages_text = str(pages)
+        pages_split = pages_text.split('</a></li>\n</ol>')
+        pages_split0 = pages_split[0]
+        pages_split1 = pages_split0[-3:]
+        pages_split2 = pages_split1.replace('>', '')
+
+        return int(pages_split2)
+
 
     def get_series(self):
         self.name = Series(self.name)
