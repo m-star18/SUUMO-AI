@@ -93,6 +93,15 @@ class SuumoScrapyJob:
         self.floor_plan = []
         self.area = []
 
+    def run(self):
+        for i, url in enumerate(self.urls):
+            print(f'{i}/{self.pages_split3}')
+            # 物件リストを切り出し
+            soup, summary = get_property_list(url)
+
+            # マンション名、住所、立地（最寄駅/徒歩~分）、築年数、建物高さが入っているcassetteitemを全て抜き出し
+            cassetteitems = summary.find_all("div", {'class': 'cassetteitem'})
+
     def get_series(self):
         self.name = Series(self.name)
         self.address = Series(self.address)
