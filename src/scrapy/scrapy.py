@@ -133,6 +133,11 @@ class SuumoScrapyJob:
                 # 立地を取得
                 locations = item.find_all("li", {'class': 'cassetteitem_detail-col2'})
 
+                # 部屋数だけ, マンション名と住所を格納（部屋情報と数を合致させるため）
+                for _ in range(len(tbody)):
+                    self.name.append(apartment)
+                    self.address.append(address)
+
                 # 立地は、1つ目から3つ目までを取得（4つ目以降は無視）
                 for location in locations:
                     cols = location.find_all('div')
@@ -145,11 +150,6 @@ class SuumoScrapyJob:
                                 self.locations1.append(text)
                             elif j == 2:
                                 self.locations2.append(text)
-
-                # 部屋数だけ, マンション名と住所を格納（部屋情報と数を合致させるため）
-                for _ in range(len(tbody)):
-                    self.name.append(apartment)
-                    self.address.append(address)
 
     def get_series(self):
         self.name = Series(self.name)
