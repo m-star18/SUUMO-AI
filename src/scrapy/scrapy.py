@@ -60,3 +60,19 @@ class SuumoScrapyJob:
         self.others = []
         self.floor_plan = []
         self.area = []
+
+    def get_series(self):
+        self.name = Series(self.name)
+        self.address = Series(self.address)
+        self.locations0 = Series(self.locations0)
+        self.locations1 = Series(self.locations1)
+        self.locations2 = Series(self.locations2)
+        self.age = Series(self.age)
+        self.height = Series(self.height)
+        self.floor = Series(self.floor)
+        self.rent = Series(self.rent)
+        self.admin = Series(self.admin)
+        self.deposit = Series(self.deposit)
+        self.others = Series(self.others)
+        self.floor_plan = Series(self.floor_plan)
+        self.area = Series(self.area)
