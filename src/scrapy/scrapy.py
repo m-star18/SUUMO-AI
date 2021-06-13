@@ -36,6 +36,15 @@ def get_apartment(item):
     return subtitle_rep2
 
 
+def get_address(item):
+    address = item.find_all("li", {'class': 'cassetteitem_detail-col1'})
+    address = str(address)
+    address_rep = address.replace('[<li class="cassetteitem_detail-col1">', '')
+    address_rep2 = address_rep.replace('</li>]', '').strip()
+
+    return address_rep2
+
+
 class SuumoScrapyJob:
     def __init__(self, url):
         """
@@ -114,6 +123,10 @@ class SuumoScrapyJob:
             for item in cassetteitems:
                 # 各建物から売りに出ている部屋数を取得
                 tbody = item.find_all('tbody')
+
+                # マンション名取得
+                apartment = get_apartment(item)
+
 
     def get_series(self):
         self.name = Series(self.name)
