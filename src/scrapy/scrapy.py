@@ -80,16 +80,21 @@ class SuumoScrapyJob:
             self.urls.append(url_page)
 
     def get_page_number(self):
+        """
+        Returns
+        -------
+        pages_split2: int
+            ページ数.
+        """
         body = self.soup.find("body")
         pages = body.find_all("div", {'class': 'pagination pagination_set-nav'})
         pages_text = str(pages)
         pages_split = pages_text.split('</a></li>\n</ol>')
         pages_split0 = pages_split[0]
         pages_split1 = pages_split0[-3:]
-        pages_split2 = pages_split1.replace('>', '')
+        pages_split2 = int(pages_split1.replace('>', ''))
 
-        return int(pages_split2)
-
+        return pages_split2
 
     def get_series(self):
         self.name = Series(self.name)
