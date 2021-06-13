@@ -5,6 +5,16 @@ import requests
 import pandas as pd
 from pandas import Series, DataFrame
 
+from const import (
+    FLOOR,
+    RENT,
+    ADMIN,
+    DEPOSIT,
+    OTHERS,
+    FLOOR_PLAN,
+    AREA,
+)
+
 
 def get_property_list(url):
     result = requests.get(url)
@@ -180,6 +190,20 @@ class SuumoScrapyJob:
                                 self.age.append(text)
                             else:
                                 self.height.append(text)
+
+                # 階、賃料、敷, 礼, 間取り、専有面積を格納
+                data = get_table(summary)
+                for j, flag in enumerate(data):
+                    if '階' in flag:
+                        self.floor.append(data[j + FLOOR])
+                        self.rent.append(data[j + RENT])
+                        self.admin.append(data[j + ADMIN])
+                        self.deposit.append(data[j + DEPOSIT])
+                        self.others.append(data[j + OTHERS])
+                        self.floor_plan.append(data[j + FLOOR_PLAN])
+                        self.area.append(data[j + AREA])
+
+                time.sleep(10)
 
     def get_series(self):
         self.name = Series(self.name)
