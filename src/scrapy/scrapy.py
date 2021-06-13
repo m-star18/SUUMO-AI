@@ -52,6 +52,16 @@ class SuumoScrapyJob:
         self.soup = BeautifulSoup(self.content)
         self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
 
+        # ページ数の取得
+        self.body = self.soup.find("body")
+        self.pages = self.body.find_all("div", {'class': 'pagination pagination_set-nav'})
+        self.pages_text = str(self.pages)
+        self.pages_split = self.pages_text.split('</a></li>\n</ol>')
+        self.pages_split0 = self.pages_split[0]
+        self.pages_split1 = self.pages_split0[-3:]
+        self.pages_split2 = self.pages_split1.replace('>', '')
+        self.pages_split3 = int(self.pages_split2)
+
         self.name = []
         self.address = []
         self.locations0 = []
