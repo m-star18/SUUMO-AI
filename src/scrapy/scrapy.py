@@ -45,6 +45,24 @@ def get_address(item):
     return address_rep2
 
 
+def get_table(summary):
+    tables = summary.find_all('table')
+
+    # 各建物に対して, 売りに出ている部屋を取得
+    rows = [table.find_all('tr') for table in tables]
+
+    # 各部屋に対して, tableに入っているtext情報を格納
+    data = []
+    for row in rows:
+        for tr in row:
+            cols = tr.find_all('td') + tr.find_all('li')
+            for td in cols:
+                text = td.find(text=True)
+                data.append(text)
+
+    return data
+
+
 class SuumoScrapyJob:
     def __init__(self, url):
         """
