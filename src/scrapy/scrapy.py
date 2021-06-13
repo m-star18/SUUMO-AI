@@ -5,12 +5,15 @@ import requests
 import pandas as pd
 from pandas import Series, DataFrame
 
-from const import URL
-
 
 class SuumoScrapyJob:
-    def __init__(self):
+    def __init__(self, url):
         """
+        Parameters
+        ----------
+        url: str
+            スクレイピングしたいurl名.
+
         Attributes
         ----------
         self.name: list of str
@@ -42,9 +45,12 @@ class SuumoScrapyJob:
         self.area: list of int
             専有面積.
         """
-        self.result = requests.get(URL)
+        self.url = url
+        self.urls = [self.url]
+        self.result = requests.get(url)
         self.content = self.result.content
         self.soup = BeautifulSoup(self.content)
+        self.summary = self.soup.find("div", {'id': 'js-bukkenList'})
 
         self.name = []
         self.address = []
