@@ -61,6 +61,7 @@ class SuumoScrapyJob:
         self.pages_split1 = self.pages_split0[-3:]
         self.pages_split2 = self.pages_split1.replace('>', '')
         self.pages_split3 = int(self.pages_split2)
+        self.pages_storage()
 
         self.name = []
         self.address = []
@@ -76,6 +77,12 @@ class SuumoScrapyJob:
         self.others = []
         self.floor_plan = []
         self.area = []
+
+    def pages_storage(self):
+        for i in range(self.pages_split3 - 2):
+            pg = str(i + 2)
+            url_page = self.url + '&pn=' + pg
+            self.urls.append(url_page)
 
     def get_series(self):
         self.name = Series(self.name)
