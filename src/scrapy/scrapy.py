@@ -28,12 +28,12 @@ def get_page_number(soup):
 
 
 def get_apartment(item):
-    subtitle = item.find_all("div", {'class': 'cassetteitem_content-title'})
-    subtitle = str(subtitle)
-    subtitle_rep = subtitle.replace('[<div class="cassetteitem_content-title">', '')
-    subtitle_rep2 = subtitle_rep.replace('</div>]', '')
+    title = item.find_all("div", {'class': 'cassetteitem_content-title'})
+    title = str(title)
+    title_rep = title.replace('[<div class="cassetteitem_content-title">', '')
+    title_rep2 = title_rep.replace('</div>]', '')
 
-    return subtitle_rep2
+    return title_rep2
 
 
 def get_address(item):
@@ -126,6 +126,14 @@ class SuumoScrapyJob:
 
                 # マンション名取得
                 apartment = get_apartment(item)
+
+                # 住所取得
+                address = get_address(item)
+
+                # 部屋数だけ, マンション名と住所を格納（部屋情報と数を合致させるため）
+                for _ in range(len(tbody)):
+                    self.name.append(apartment)
+                    self.address.append(address)
 
 
     def get_series(self):
