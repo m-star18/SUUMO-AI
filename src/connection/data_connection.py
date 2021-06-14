@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('../data/suumo_toyotashi.csv', sep='\t', encoding='utf-16')
+from src.const import URL
+
+df = pd.read_csv(f'../../data/suumo_{URL}.csv', sep='\t', encoding='utf-16')
 
 # 不要な列を削除
 df.drop(['Unnamed: 0'], axis=1, inplace=True)
@@ -108,15 +110,8 @@ df = pd.concat([df, splitted10], axis=1)
 
 # 建物高さを数値化。地下は無視。
 df['建物高さ'].str.encode('cp932')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下1地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下2地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下3地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下4地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下5地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下6地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下7地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下8地上', u'')
-df['建物高さ'] = df['建物高さ'].str.replace(u'地下9地上', u'')
+for i in range(1, 10):
+    df['建物高さ'] = df['建物高さ'].str.replace(u'地下{0}地上'.format(i), u'')
 df['建物高さ'] = df['建物高さ'].str.replace(u'平屋', u'1')
 df['建物高さ'] = df['建物高さ'].str.replace(u'階建', u'')
 df['建物高さ'] = pd.to_numeric(df['建物高さ'])
@@ -144,4 +139,4 @@ df['間取り'] = pd.to_numeric(df['間取り'])
 df = df[['マンション名', '住所', '市', '町', '間取り', '間取りDK', '間取りK', '間取りL', '間取りS', '築年数', '建物高さ', '階1', '専有面積',
          '賃料+管理費', '敷/礼', '路線1', '駅1', '徒歩1', '路線2', '駅2', '徒歩2', '路線3', '駅3', '徒歩3', '賃料', '管理費', '敷金', '礼金']]
 
-df.to_csv('suumo_toyotashi1.csv', sep='\t', encoding='utf-16')
+df.to_csv(f'../../data/suumo_{URL}1.csv', sep='\t', encoding='utf-16')
