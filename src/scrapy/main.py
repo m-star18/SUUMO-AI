@@ -1,5 +1,5 @@
 from scrapy import SuumoScrapyJob
-from const import URL
+from src.const import URL
 
 
 def main():

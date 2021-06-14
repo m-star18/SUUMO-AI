@@ -3,9 +3,9 @@ import time
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-from pandas import Series, DataFrame
+from pandas import Series
 
-from const import (
+from src.const import (
     NAME,
     FLOOR,
     RENT,
