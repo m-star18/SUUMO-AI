@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-from src.const import URL
+from src.const import NAME
 
-df = pd.read_csv(f'../../data/suumo_{URL}.csv', sep='\t', encoding='utf-16')
+df = pd.read_csv(f'../../data/suumo_{NAME}.csv', sep='\t', encoding='utf-16')
 
 # 不要な列を削除する.
 df.drop(['Unnamed: 0'], axis=1, inplace=True)
@@ -136,4 +136,4 @@ df['間取り'] = pd.to_numeric(df['間取り'])
 df = df[['マンション名', '住所', '市', '町', '間取り', '間取りDK', '間取りK', '間取りL', '間取りS', '築年数', '建物高さ', '階1', '専有面積',
          '賃料+管理費', '敷/礼', '路線1', '駅1', '徒歩1', '路線2', '駅2', '徒歩2', '路線3', '駅3', '徒歩3', '賃料', '管理費', '敷金', '礼金']]
 
-df.to_csv(f'../../data/suumo_{URL}1.csv', sep='\t', encoding='utf-16')
+df.to_csv(f'../../data/suumo_{NAME}1.csv', sep='\t', encoding='utf-16')
